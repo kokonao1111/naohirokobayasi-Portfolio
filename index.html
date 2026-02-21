@@ -1,0 +1,1859 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <!-- ============================================================
+       META / SEO
+  ============================================================ -->
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Web制作・アプリ開発のフリーランスエンジニア。UI/UXを意識した設計でビジネスの課題を解決します。">
+  <meta name="keywords" content="Web制作, アプリ開発, フリーランス, UI/UX, JavaScript, Firebase">
+  <meta property="og:title" content="Portfolio | Web & App Developer">
+  <meta property="og:description" content="ユーザー体験を設計・実装します。">
+  <meta property="og:type" content="website">
+  <title>Portfolio | Web & App Developer</title>
+
+  <!-- ============================================================
+       FONTS — Cormorant Garamond (display) + DM Sans (body)
+  ============================================================ -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&display=swap" rel="stylesheet">
+
+  <!-- ============================================================
+       STYLES
+  ============================================================ -->
+  <style>
+    /* ── CSS Variables ───────────────────────────────────────── */
+    :root {
+      --c-bg:        #F9F7F4;      /* warm off-white */
+      --c-surface:   #FFFFFF;
+      --c-ink:       #0D0D0D;
+      --c-ink-muted: #6B6B6B;
+      --c-accent:    #1A1A1A;
+      --c-rule:      #E2DED9;
+      --c-tag:       #EDEBE7;
+
+      --f-display: 'Cormorant Garamond', Georgia, serif;
+      --f-body:    'DM Sans', sans-serif;
+
+      --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+
+      --section-pad: clamp(80px, 12vw, 160px);
+      --content-w:   1100px;
+      --gutter:      clamp(24px, 5vw, 60px);
+    }
+
+    /* ── Reset ───────────────────────────────────────────────── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      background: var(--c-bg);
+      color: var(--c-ink);
+      font-family: var(--f-body);
+      font-size: 16px;
+      line-height: 1.7;
+      -webkit-font-smoothing: antialiased;
+      overflow-x: hidden;
+    }
+    img, svg { display: block; max-width: 100%; }
+    a { color: inherit; text-decoration: none; }
+    ul { list-style: none; }
+
+    /* ── Layout helpers ──────────────────────────────────────── */
+    .container {
+      width: min(var(--content-w), 100% - var(--gutter) * 2);
+      margin-inline: auto;
+    }
+
+    /* ── Fade-in animation ───────────────────────────────────── */
+    .reveal {
+      opacity: 0;
+      transform: translateY(28px);
+      transition: opacity 0.75s var(--ease-out), transform 0.75s var(--ease-out);
+    }
+    .reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    /* stagger children */
+    .reveal-group > * {
+      opacity: 0;
+      transform: translateY(24px);
+      transition: opacity 0.65s var(--ease-out), transform 0.65s var(--ease-out);
+    }
+    .reveal-group.visible > * { opacity: 1; transform: translateY(0); }
+    .reveal-group.visible > *:nth-child(1) { transition-delay: 0s; }
+    .reveal-group.visible > *:nth-child(2) { transition-delay: .12s; }
+    .reveal-group.visible > *:nth-child(3) { transition-delay: .24s; }
+    .reveal-group.visible > *:nth-child(4) { transition-delay: .36s; }
+    .reveal-group.visible > *:nth-child(5) { transition-delay: .48s; }
+    .reveal-group.visible > *:nth-child(6) { transition-delay: .60s; }
+
+    /* ── Section label ───────────────────────────────────────── */
+    .section-label {
+      display: inline-block;
+      font-family: var(--f-body);
+      font-size: 11px;
+      font-weight: 500;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--c-ink-muted);
+      margin-bottom: 48px;
+      position: relative;
+      padding-left: 28px;
+    }
+    .section-label::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 50%;
+      width: 18px;
+      height: 1px;
+      background: var(--c-ink-muted);
+    }
+
+    /* ── Divider ─────────────────────────────────────────────── */
+    .rule { height: 1px; background: var(--c-rule); }
+
+    /* ══════════════════════════════════════════════════════════
+       NAVIGATION
+    ══════════════════════════════════════════════════════════ */
+    #nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      padding: 22px 0;
+      transition: background 0.4s, backdrop-filter 0.4s, box-shadow 0.4s;
+    }
+    #nav.scrolled {
+      background: rgba(249,247,244,0.88);
+      backdrop-filter: saturate(160%) blur(20px);
+      -webkit-backdrop-filter: saturate(160%) blur(20px);
+      box-shadow: 0 1px 0 var(--c-rule);
+    }
+    .nav-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .nav-logo {
+      font-family: var(--f-display);
+      font-size: 22px;
+      font-weight: 400;
+      letter-spacing: 0.01em;
+    }
+    .nav-links {
+      display: flex;
+      gap: 40px;
+      align-items: center;
+    }
+    .nav-links a {
+      font-size: 13px;
+      font-weight: 400;
+      color: var(--c-ink-muted);
+      letter-spacing: 0.02em;
+      transition: color 0.25s;
+      position: relative;
+    }
+    .nav-links a::after {
+      content: '';
+      position: absolute;
+      bottom: -2px; left: 0;
+      width: 0; height: 1px;
+      background: var(--c-ink);
+      transition: width 0.3s var(--ease-out);
+    }
+    .nav-links a:hover { color: var(--c-ink); }
+    .nav-links a:hover::after { width: 100%; }
+
+    /* hamburger */
+    .nav-burger {
+      display: none;
+      flex-direction: column;
+      gap: 5px;
+      cursor: pointer;
+      padding: 6px;
+      background: none;
+      border: none;
+    }
+    .nav-burger span {
+      display: block;
+      width: 24px;
+      height: 1.5px;
+      background: var(--c-ink);
+      transition: transform 0.3s, opacity 0.3s;
+    }
+    .nav-burger.open span:nth-child(1) { transform: translateY(6.5px) rotate(45deg); }
+    .nav-burger.open span:nth-child(2) { opacity: 0; }
+    .nav-burger.open span:nth-child(3) { transform: translateY(-6.5px) rotate(-45deg); }
+
+    /* mobile menu */
+    .nav-mobile {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: var(--c-bg);
+      z-index: 99;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 40px;
+    }
+    .nav-mobile.open { display: flex; }
+    .nav-mobile a {
+      font-family: var(--f-display);
+      font-size: clamp(32px, 8vw, 52px);
+      font-weight: 300;
+      color: var(--c-ink);
+      opacity: 0;
+      transform: translateY(20px);
+      transition: opacity 0.4s var(--ease-out), transform 0.4s var(--ease-out);
+    }
+    .nav-mobile.open a { opacity: 1; transform: translateY(0); }
+    .nav-mobile.open a:nth-child(1) { transition-delay: 0.05s; }
+    .nav-mobile.open a:nth-child(2) { transition-delay: 0.10s; }
+    .nav-mobile.open a:nth-child(3) { transition-delay: 0.15s; }
+    .nav-mobile.open a:nth-child(4) { transition-delay: 0.20s; }
+    .nav-mobile.open a:nth-child(5) { transition-delay: 0.25s; }
+
+    @media (max-width: 720px) {
+      .nav-links { display: none; }
+      .nav-burger { display: flex; }
+    }
+
+    /* ══════════════════════════════════════════════════════════
+       HERO
+    ══════════════════════════════════════════════════════════ */
+    #hero {
+      min-height: 100svh;
+      display: grid;
+      place-items: center;
+      padding-top: 80px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    /* subtle background texture */
+    #hero::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(ellipse 80% 60% at 70% 40%, rgba(200,190,178,0.18) 0%, transparent 70%),
+        radial-gradient(ellipse 50% 40% at 20% 80%, rgba(180,170,160,0.10) 0%, transparent 60%);
+      pointer-events: none;
+    }
+
+    .hero-inner {
+      text-align: center;
+      position: relative;
+    }
+    .hero-eyebrow {
+      font-size: 12px;
+      font-weight: 400;
+      letter-spacing: 0.24em;
+      text-transform: uppercase;
+      color: var(--c-ink-muted);
+      margin-bottom: 32px;
+      opacity: 0;
+      animation: fadeUp 0.8s var(--ease-out) 0.2s forwards;
+    }
+    .hero-name {
+      font-family: var(--f-display);
+      font-size: clamp(56px, 10vw, 120px);
+      font-weight: 300;
+      line-height: 1.0;
+      letter-spacing: -0.02em;
+      margin-bottom: 28px;
+      opacity: 0;
+      animation: fadeUp 0.9s var(--ease-out) 0.35s forwards;
+    }
+    .hero-name em {
+      font-style: italic;
+      font-weight: 300;
+    }
+    .hero-tagline {
+      font-size: clamp(15px, 2.2vw, 19px);
+      font-weight: 300;
+      color: var(--c-ink-muted);
+      margin-bottom: 56px;
+      letter-spacing: 0.01em;
+      opacity: 0;
+      animation: fadeUp 0.9s var(--ease-out) 0.5s forwards;
+    }
+    .hero-cta {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      background: var(--c-ink);
+      color: #fff;
+      padding: 16px 36px;
+      font-size: 13px;
+      font-weight: 400;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      border-radius: 2px;
+      transition: background 0.3s, transform 0.3s var(--ease-out), box-shadow 0.3s;
+      opacity: 0;
+      animation: fadeUp 0.9s var(--ease-out) 0.65s forwards;
+    }
+    .hero-cta:hover {
+      background: #333;
+      transform: translateY(-2px);
+      box-shadow: 0 12px 40px rgba(0,0,0,0.15);
+    }
+    .hero-cta svg { transition: transform 0.3s var(--ease-out); }
+    .hero-cta:hover svg { transform: translateX(4px); }
+
+    /* scroll indicator */
+    .hero-scroll {
+      position: absolute;
+      bottom: 40px;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+      opacity: 0;
+      animation: fadeUp 0.9s var(--ease-out) 1.2s forwards;
+    }
+    .hero-scroll span {
+      font-size: 10px;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--c-ink-muted);
+    }
+    .scroll-line {
+      width: 1px;
+      height: 40px;
+      background: linear-gradient(to bottom, var(--c-ink-muted), transparent);
+      animation: scrollPulse 2s ease-in-out infinite;
+    }
+    @keyframes scrollPulse {
+      0%, 100% { opacity: 0.4; transform: scaleY(1); }
+      50% { opacity: 1; transform: scaleY(1.15); }
+    }
+
+    @keyframes fadeUp {
+      to { opacity: 1; transform: translateY(0); }
+      from { opacity: 0; transform: translateY(24px); }
+    }
+
+    /* ══════════════════════════════════════════════════════════
+       ABOUT
+    ══════════════════════════════════════════════════════════ */
+    #about {
+      padding: var(--section-pad) 0;
+    }
+    .about-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: clamp(48px, 8vw, 120px);
+      align-items: start;
+    }
+    .about-heading {
+      font-family: var(--f-display);
+      font-size: clamp(36px, 5vw, 60px);
+      font-weight: 300;
+      line-height: 1.15;
+      letter-spacing: -0.01em;
+    }
+    .about-heading em { font-style: italic; }
+    .about-body {
+      font-size: 15px;
+      font-weight: 300;
+      color: var(--c-ink-muted);
+      line-height: 1.85;
+      margin-bottom: 48px;
+    }
+    .about-pills {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+    .pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: var(--c-tag);
+      padding: 8px 16px;
+      border-radius: 2px;
+      font-size: 12px;
+      font-weight: 400;
+      letter-spacing: 0.04em;
+      color: var(--c-ink);
+      transition: background 0.25s, transform 0.25s var(--ease-out);
+    }
+    .pill:hover {
+      background: var(--c-rule);
+      transform: translateY(-1px);
+    }
+    .pill .dot {
+      width: 6px; height: 6px;
+      border-radius: 50%;
+      background: var(--c-ink-muted);
+    }
+
+    @media (max-width: 768px) {
+      .about-grid { grid-template-columns: 1fr; gap: 40px; }
+    }
+
+    /* ══════════════════════════════════════════════════════════
+       WORKS
+    ══════════════════════════════════════════════════════════ */
+    #works {
+      padding: var(--section-pad) 0;
+      background: var(--c-surface);
+    }
+    .works-header {
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+      margin-bottom: 64px;
+      flex-wrap: wrap;
+      gap: 24px;
+    }
+    .works-heading {
+      font-family: var(--f-display);
+      font-size: clamp(36px, 5vw, 60px);
+      font-weight: 300;
+      line-height: 1.1;
+      letter-spacing: -0.01em;
+    }
+    .works-count {
+      font-family: var(--f-display);
+      font-size: 13px;
+      color: var(--c-ink-muted);
+      letter-spacing: 0.08em;
+      align-self: flex-end;
+    }
+
+    /* ── card grid ───────────────────────────────────────── */
+    .works-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(min(340px, 100%), 1fr));
+      gap: 32px;
+    }
+
+    /* ── individual card ─────────────────────────────────── */
+    /*
+     * [カスタマイズ] .card に data-url 属性を設定することでリンク先を変更できます。
+     * JavaScript が cursor:pointer と onclick を自動で付与します。
+     */
+    .card {
+      background: var(--c-bg);
+      border: 1px solid var(--c-rule);
+      border-radius: 12px;           /* Apple風の丸み */
+      overflow: hidden;
+      position: relative;
+      transition:
+        transform 0.4s var(--ease-out),
+        box-shadow 0.4s var(--ease-out),
+        border-color 0.3s;
+    }
+    /* リンクあり（data-url 指定済み）カードはポインター */
+    .card[data-url] { cursor: pointer; }
+    .card:hover {
+      transform: translateY(-8px) scale(1.01);
+      box-shadow:
+        0 2px 4px rgba(0,0,0,0.04),
+        0 8px 20px rgba(0,0,0,0.07),
+        0 24px 56px rgba(0,0,0,0.09);
+      border-color: transparent;
+    }
+
+    /* ── card image wrapper ──────────────────────────────── */
+    /*
+     * [カスタマイズ] .card-thumb-wrap 内に <img> を置くだけで画像表示できます。
+     * 画像がない場合はフォールバック背景が自動で表示されます。
+     */
+    .card-thumb-wrap {
+      position: relative;
+      width: 100%;
+      overflow: hidden;
+      /* アプリカード（縦長アイコン）と Web カード（横長SS）で比率を切り替え */
+      aspect-ratio: var(--thumb-ratio, 16/9);
+      background: var(--thumb-bg, #f0ede8);   /* フォールバック背景 */
+    }
+
+    /* 実画像 */
+    .card-thumb-wrap img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;              /* トリミングして領域を埋める */
+      object-position: center top;    /* スクリーンショットは上揃えが多い */
+      display: block;
+      transition: transform 0.65s var(--ease-out), opacity 0.4s;
+      /* 角丸はラッパー側の overflow:hidden で実現 */
+    }
+    .card:hover .card-thumb-wrap img { transform: scale(1.05); }
+
+    /* 画像読み込み前のスケルトン */
+    .card-thumb-wrap img:not([src]),
+    .card-thumb-wrap img[src=""] {
+      opacity: 0;
+    }
+
+    /* ── アプリアイコン専用レイアウト ───────────────────── */
+    /*
+     * data-layout="app" のカードはアイコンを中央に浮かせる形式にします。
+     * 背景グラデーション + 中央配置アイコン（iOS風）
+     */
+    .card[data-layout="app"] .card-thumb-wrap {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 32px;
+    }
+    .card[data-layout="app"] .card-thumb-wrap img {
+      width: clamp(96px, 28%, 140px);
+      height: auto;
+      aspect-ratio: 1;
+      object-fit: contain;
+      object-position: center;
+      border-radius: 22%;            /* iOS アイコン風角丸 */
+      box-shadow:
+        0 4px 12px rgba(0,0,0,0.18),
+        0 12px 32px rgba(0,0,0,0.14); /* ソフトシャドウ */
+      transform: none;               /* ズームではなく別アニメ */
+      transition: transform 0.5s var(--ease-out), box-shadow 0.5s var(--ease-out);
+    }
+    .card[data-layout="app"]:hover .card-thumb-wrap img {
+      transform: translateY(-6px) scale(1.06);
+      box-shadow:
+        0 8px 20px rgba(0,0,0,0.20),
+        0 24px 52px rgba(0,0,0,0.18);
+    }
+
+    /* ── Web スクリーンショット専用 ─────────────────────── */
+    /*
+     * data-layout="web" のカードはブラウザ風のフレームを追加します。
+     */
+    .card[data-layout="web"] .card-thumb-wrap {
+      padding: 0;
+    }
+    /* ブラウザ風トップバー */
+    .card[data-layout="web"] .card-thumb-wrap::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 28px;
+      background: #F0EDEA;
+      border-bottom: 1px solid var(--c-rule);
+      z-index: 1;
+    }
+    /* ドットインジケーター（● ● ●） */
+    .card[data-layout="web"] .card-thumb-wrap::after {
+      content: '';
+      position: absolute;
+      top: 10px; left: 14px;
+      width: 8px; height: 8px;
+      border-radius: 50%;
+      background: #D1CEC9;
+      box-shadow: 14px 0 0 #D1CEC9, 28px 0 0 #D1CEC9;
+      z-index: 2;
+    }
+    .card[data-layout="web"] .card-thumb-wrap img {
+      margin-top: 28px;           /* バーの高さ分ずらす */
+      height: calc(100% - 28px);
+      border-radius: 0 0 4px 4px;
+      box-shadow:
+        0 2px 8px rgba(0,0,0,0.06),
+        0 8px 24px rgba(0,0,0,0.08); /* ソフトシャドウ */
+    }
+
+    /* ── フォールバック：画像なしの場合 ────────────────── */
+    .card-thumb-fallback {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: var(--f-display);
+      font-size: clamp(24px, 4vw, 44px);
+      font-weight: 300;
+      letter-spacing: -0.01em;
+      color: rgba(255,255,255,0.55);
+      pointer-events: none;
+      user-select: none;
+    }
+    /* 画像が存在する場合はフォールバックを隠す */
+    .card-thumb-wrap:has(img[src]:not([src=""])) .card-thumb-fallback { display: none; }
+
+    /* ── バッジ（iOS App / Web など） ───────────────────── */
+    .card-tag {
+      position: absolute;
+      top: 14px; right: 14px;    /* 右上に変更（ブラウザバーと干渉しない） */
+      background: rgba(255,255,255,0.72);
+      backdrop-filter: blur(10px) saturate(160%);
+      -webkit-backdrop-filter: blur(10px) saturate(160%);
+      border: 1px solid rgba(255,255,255,0.5);
+      border-radius: 20px;        /* pill shape */
+      padding: 4px 12px;
+      font-size: 10px;
+      font-weight: 500;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--c-ink);
+      z-index: 3;
+      transition: opacity 0.3s;
+    }
+
+    /* ── カード本文エリア ───────────────────────────────── */
+    .card-body {
+      padding: 24px 28px 28px;
+    }
+    .card-title {
+      font-family: var(--f-display);
+      font-size: 24px;
+      font-weight: 400;
+      letter-spacing: -0.01em;
+      margin-bottom: 8px;
+    }
+    .card-desc {
+      font-size: 13px;
+      font-weight: 300;
+      color: var(--c-ink-muted);
+      line-height: 1.75;
+      margin-bottom: 20px;
+    }
+    .card-footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+    .card-tags {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+    .tag-sm {
+      font-size: 10px;
+      font-weight: 500;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--c-ink-muted);
+      background: var(--c-tag);
+      padding: 4px 10px;
+      border-radius: 20px;
+    }
+
+    /* ── カードリンクアロー ─────────────────────────────── */
+    .card-arrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      font-size: 11px;
+      font-weight: 400;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--c-ink-muted);
+      transition: color 0.25s, gap 0.3s var(--ease-out);
+      white-space: nowrap;
+    }
+    .card[data-url]:hover .card-arrow {
+      color: var(--c-ink);
+      gap: 9px;
+    }
+
+    /* ── Coming Soon カード ─────────────────────────────── */
+    .card-soon .card-thumb-wrap {
+      background: linear-gradient(135deg, #EDEAE6 0%, #DDD9D3 100%);
+    }
+    .card-soon .card-thumb-fallback {
+      color: rgba(0,0,0,0.12);
+      letter-spacing: 0.22em;
+      font-size: clamp(13px, 2vw, 17px);
+      text-transform: uppercase;
+    }
+    .card-soon .card-title { color: var(--c-ink-muted); }
+
+    /* ══════════════════════════════════════════════════════════
+       SKILLS
+    ══════════════════════════════════════════════════════════ */
+    #skills {
+      padding: var(--section-pad) 0;
+    }
+    .skills-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 2px;
+      margin-top: 0;
+      border: 1px solid var(--c-rule);
+      border-radius: 4px;
+      overflow: hidden;
+    }
+    .skill-item {
+      padding: 32px 28px;
+      border: 1px solid var(--c-rule);
+      background: var(--c-surface);
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      transition: background 0.3s, transform 0.3s var(--ease-out);
+      cursor: default;
+    }
+    .skill-item:hover {
+      background: var(--c-bg);
+      transform: scale(1.02);
+      z-index: 1;
+      box-shadow: 0 8px 30px rgba(0,0,0,0.06);
+    }
+    .skill-icon {
+      font-size: 22px;
+      line-height: 1;
+    }
+    .skill-name {
+      font-family: var(--f-display);
+      font-size: 19px;
+      font-weight: 400;
+      letter-spacing: -0.01em;
+    }
+    .skill-level {
+      font-size: 11px;
+      font-weight: 400;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--c-ink-muted);
+    }
+
+    /* ══════════════════════════════════════════════════════════
+       CONTACT
+    ══════════════════════════════════════════════════════════ */
+    #contact {
+      padding: var(--section-pad) 0;
+      background: var(--c-ink);
+      color: #fff;
+    }
+    #contact .section-label { color: rgba(255,255,255,0.4); }
+    #contact .section-label::before { background: rgba(255,255,255,0.4); }
+
+    .contact-heading {
+      font-family: var(--f-display);
+      font-size: clamp(36px, 6vw, 72px);
+      font-weight: 300;
+      line-height: 1.1;
+      letter-spacing: -0.02em;
+      margin-bottom: 16px;
+      color: #fff;
+    }
+    .contact-sub {
+      font-size: 15px;
+      font-weight: 300;
+      color: rgba(255,255,255,0.5);
+      margin-bottom: 60px;
+    }
+
+    /* form */
+    .contact-form {
+      display: grid;
+      gap: 24px;
+      max-width: 560px;
+    }
+    .form-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+    .field {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    .field label {
+      font-size: 11px;
+      font-weight: 500;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.45);
+    }
+    .field input, .field textarea, .field select {
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,255,255,0.12);
+      border-radius: 2px;
+      padding: 14px 16px;
+      color: #fff;
+      font-family: var(--f-body);
+      font-size: 14px;
+      font-weight: 300;
+      outline: none;
+      transition: border-color 0.3s, background 0.3s;
+      resize: none;
+    }
+    .field input::placeholder, .field textarea::placeholder { color: rgba(255,255,255,0.2); }
+    .field input:focus, .field textarea:focus {
+      border-color: rgba(255,255,255,0.4);
+      background: rgba(255,255,255,0.08);
+    }
+
+    .form-submit {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      background: #fff;
+      color: var(--c-ink);
+      padding: 16px 36px;
+      font-size: 13px;
+      font-weight: 500;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      border: none;
+      border-radius: 2px;
+      cursor: pointer;
+      transition: background 0.3s, transform 0.3s var(--ease-out), box-shadow 0.3s;
+      width: fit-content;
+    }
+    .form-submit:hover {
+      background: #e0ddd8;
+      transform: translateY(-2px);
+      box-shadow: 0 12px 40px rgba(255,255,255,0.08);
+    }
+    .form-submit svg { transition: transform 0.3s var(--ease-out); }
+    .form-submit:hover svg { transform: translateX(4px); }
+
+    /* ── 送信ステータスメッセージ共通 ───────────────────── */
+    .form-status {
+      display: none;                       /* JS で block に切り替え */
+      padding: 16px 20px;
+      border-radius: 4px;
+      font-size: 14px;
+      font-weight: 300;
+      line-height: 1.6;
+      margin-top: 4px;
+    }
+    /* 成功 */
+    .form-status.is-success {
+      background: rgba(255,255,255,0.07);
+      border: 1px solid rgba(255,255,255,0.18);
+      color: rgba(255,255,255,0.75);
+    }
+    /* エラー */
+    .form-status.is-error {
+      background: rgba(220, 80, 60, 0.12);
+      border: 1px solid rgba(220, 80, 60, 0.3);
+      color: rgba(255, 160, 140, 0.9);
+    }
+
+    /* ── フィールドバリデーションエラー表示 ─────────── */
+    .field input.invalid,
+    .field textarea.invalid {
+      border-color: rgba(220, 80, 60, 0.55) !important;
+    }
+    .field .field-error {
+      display: none;
+      font-size: 11px;
+      color: rgba(220, 120, 100, 0.9);
+      letter-spacing: 0.04em;
+    }
+    .field input.invalid ~ .field-error,
+    .field textarea.invalid ~ .field-error { display: block; }
+
+    /* ── 送信ボタン：送信中の状態 ────────────────────── */
+    .form-submit:disabled {
+      opacity: 0.55;
+      cursor: not-allowed;
+      transform: none !important;
+      box-shadow: none !important;
+    }
+
+    /* ── contact-footer：メール直リンク ─────────────── */
+    /*
+     * SNSリンクを削除し、メール直リンクのみのシンプルな構成に変更。
+     * 後から SNS を追加したい場合は .contact-extra-link をコピーしてください。
+     */
+    .contact-footer-row {
+      display: flex;
+      align-items: center;
+      gap: 32px;
+      margin-top: 56px;
+      padding-top: 40px;
+      border-top: 1px solid rgba(255,255,255,0.08);
+      flex-wrap: wrap;
+    }
+    .contact-footer-label {
+      font-size: 11px;
+      font-weight: 400;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.3);
+    }
+    .contact-email-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      font-family: var(--f-display);
+      font-size: clamp(16px, 2.5vw, 22px);
+      font-weight: 300;
+      color: rgba(255,255,255,0.65);
+      letter-spacing: 0.01em;
+      position: relative;
+      transition: color 0.3s;
+    }
+    .contact-email-link::after {
+      content: '';
+      position: absolute;
+      bottom: -3px; left: 0;
+      width: 0; height: 1px;
+      background: rgba(255,255,255,0.5);
+      transition: width 0.4s var(--ease-out);
+    }
+    .contact-email-link:hover { color: #fff; }
+    .contact-email-link:hover::after { width: 100%; }
+    .contact-email-link svg {
+      opacity: 0.5;
+      transition: opacity 0.3s, transform 0.3s var(--ease-out);
+    }
+    .contact-email-link:hover svg {
+      opacity: 1;
+      transform: translateX(4px);
+    }
+    /* ▼ SNS追加用テンプレート（必要なときだけ使用）*/
+    .contact-extra-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 12px;
+      font-weight: 400;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.35);
+      transition: color 0.25s;
+    }
+    .contact-extra-link:hover { color: rgba(255,255,255,0.8); }
+
+    /* ══════════════════════════════════════════════════════════
+       FOOTER
+    ══════════════════════════════════════════════════════════ */
+    footer {
+      background: #080808;
+      padding: 28px 0;
+      border-top: 1px solid rgba(255,255,255,0.05);
+    }
+    .footer-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+    .footer-copy {
+      font-size: 12px;
+      color: rgba(255,255,255,0.25);
+      letter-spacing: 0.04em;
+    }
+    .footer-logo {
+      font-family: var(--f-display);
+      font-size: 16px;
+      font-weight: 300;
+      color: rgba(255,255,255,0.25);
+    }
+
+    @media (max-width: 560px) {
+      .form-row { grid-template-columns: 1fr; }
+    }
+
+    /* ══════════════════════════════════════════════════════════
+       LOADING SCREEN
+       ────────────────────────────────────────────────────────
+       [カスタマイズ用変数]
+         --loader-bg    : ローダー背景色
+         --loader-color : テキスト・ラインの色
+    ══════════════════════════════════════════════════════════ */
+    :root {
+      --loader-bg:    #0D0D0D;   /* 背景：黒（白にする場合は #F9F7F4） */
+      --loader-color: #F9F7F4;   /* テキスト・ライン色（白にした場合は #0D0D0D） */
+    }
+
+    /* ── オーバーレイ本体 ────────────────────────────────── */
+    #loader {
+      position: fixed;
+      inset: 0;
+      z-index: 9999;              /* 最前面 */
+      background: var(--loader-bg);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      pointer-events: all;        /* ローディング中は下のコンテンツをブロック */
+
+      /* フェードアウト用トランジション（JSで .is-hidden クラスを付与） */
+      transition: opacity 0.55s cubic-bezier(0.4, 0, 0.2, 1),
+                  visibility 0.55s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    /* 非表示状態 */
+    #loader.is-hidden {
+      opacity: 0;
+      visibility: hidden;
+      pointer-events: none;
+    }
+
+    /* ── ローダー中央コンテンツ ──────────────────────────── */
+    .loader-inner {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0;
+    }
+
+    /* サイト名／ロゴ */
+    .loader-logo {
+      font-family: var(--f-display);
+      font-size: clamp(28px, 5vw, 48px);
+      font-weight: 300;
+      letter-spacing: 0.04em;
+      color: var(--loader-color);
+      /* フェードイン */
+      opacity: 0;
+      transform: translateY(10px);
+      animation: loaderFadeUp 0.7s cubic-bezier(0.16, 1, 0.3, 1) 0.1s forwards;
+    }
+    .loader-logo em {
+      font-style: italic;
+      font-weight: 300;
+    }
+
+    /* サブテキスト（任意） */
+    .loader-sub {
+      font-family: var(--f-body);
+      font-size: 11px;
+      font-weight: 400;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: rgba(249, 247, 244, 0.35);  /* --loader-color の薄版 */
+      margin-top: 10px;
+      opacity: 0;
+      animation: loaderFadeUp 0.7s cubic-bezier(0.16, 1, 0.3, 1) 0.25s forwards;
+    }
+
+    /* ── プログレスライン ─────────────────────────────────── */
+    .loader-progress {
+      width: clamp(48px, 12vw, 80px);
+      height: 1px;
+      background: rgba(249, 247, 244, 0.12);  /* トラック（薄い線） */
+      margin-top: 32px;
+      position: relative;
+      overflow: hidden;
+      border-radius: 1px;
+      opacity: 0;
+      animation: loaderFadeUp 0.5s cubic-bezier(0.16, 1, 0.3, 1) 0.35s forwards;
+    }
+    /* 伸びるインジケーター */
+    .loader-progress-bar {
+      position: absolute;
+      inset: 0;
+      background: var(--loader-color);
+      transform-origin: left center;
+      transform: scaleX(0);
+      /* duration は JS の LOADER_DURATION に合わせて自動調整される */
+      animation: loaderBar var(--loader-bar-duration, 1.1s)
+                 cubic-bezier(0.25, 0.46, 0.45, 0.94)
+                 0.45s forwards;
+    }
+
+    /* ── キーフレーム ─────────────────────────────────────── */
+    @keyframes loaderFadeUp {
+      to   { opacity: 1; transform: translateY(0); }
+      from { opacity: 0; transform: translateY(10px); }
+    }
+    @keyframes loaderBar {
+      0%   { transform: scaleX(0); }
+      100% { transform: scaleX(1); }
+    }
+
+    /* ── ボディスクロールロック（ローディング中） ──────────── */
+    body.is-loading {
+      overflow: hidden;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ══════════════════════════════════════════════════════════
+       LOADING SCREEN
+       ────────────────────────────────────────────────────────
+       [ON/OFF 切り替え]
+         下の <script> ブロック内の
+           LOADER_ENABLED = true   ← 表示する
+           LOADER_ENABLED = false  ← 無効にする
+
+       [表示時間の調整]
+         LOADER_DURATION = 1400   ← ミリ秒で指定（1400 = 1.4秒）
+
+       [ロゴ文字の変更]
+         .loader-logo の中の「<em>Your</em> Name」を書き換える
+  ══════════════════════════════════════════════════════════ -->
+  <div id="loader" role="status" aria-label="読み込み中" aria-live="polite">
+    <div class="loader-inner">
+
+      <!-- ▼ ロゴ／サイト名：変更してください -->
+      <div class="loader-logo"><em>小林</em> 直寛</div>
+
+      <!-- ▼ サブテキスト：不要なら削除してください -->
+      <div class="loader-sub" aria-hidden="true">Portfolio</div>
+
+      <!-- プログレスライン -->
+      <div class="loader-progress" aria-hidden="true">
+        <div class="loader-progress-bar"></div>
+      </div>
+
+    </div>
+  </div><!-- /#loader -->
+
+  <!-- SEO 対策：ローダーが非表示になるまでメインを隠す（visually hidden ではなく aria で制御） -->
+  <!-- メインコンテンツは通常通りレンダリングされるので SEO への影響なし -->
+
+  <!-- ══════════════════════════════════════════════════════════
+       NAVIGATION
+  ══════════════════════════════════════════════════════════ -->
+  <nav id="nav" role="navigation" aria-label="メインナビゲーション">
+    <div class="container nav-inner">
+
+      <!-- ロゴ：名前を変更してください -->
+      <a href="#" class="nav-logo">Portfolio</a>
+
+      <ul class="nav-links" role="list">
+        <li><a href="#about">About</a></li>
+        <li><a href="#works">Works</a></li>
+        <li><a href="#skills">Skills</a></li>
+        <li><a href="#contact">Contact</a></li>
+      </ul>
+
+      <!-- モバイル ハンバーガー -->
+      <button class="nav-burger" id="burger" aria-label="メニューを開く" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </nav>
+
+  <!-- モバイル フルスクリーンメニュー -->
+  <div class="nav-mobile" id="navMobile" role="dialog" aria-label="モバイルメニュー">
+    <a href="#about"   onclick="closeMenu()">About</a>
+    <a href="#works"   onclick="closeMenu()">Works</a>
+    <a href="#skills"  onclick="closeMenu()">Skills</a>
+    <a href="#contact" onclick="closeMenu()">Contact</a>
+  </div>
+
+
+  <!-- ══════════════════════════════════════════════════════════
+       HERO
+  ══════════════════════════════════════════════════════════ -->
+  <section id="hero" aria-label="ヒーローセクション">
+    <div class="hero-inner container">
+
+      <!-- ▼ 肩書き：変更してください -->
+      <p class="hero-eyebrow">Web &amp; App Developer</p>
+
+      <!-- ▼ 名前：変更してください -->
+      <h1 class="hero-name"><em>小林</em> 直寛</h1>
+
+      <!-- ▼ キャッチコピー：変更してください -->
+      <p class="hero-tagline">想像以上の体験を設計・実装します</p>
+
+      <!-- ▼ CTA ボタン：href を変更してください -->
+      <a href="#contact" class="hero-cta">
+        制作相談はこちら
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+          <path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </a>
+    </div>
+
+    <!-- スクロールインジケーター -->
+    <div class="hero-scroll" aria-hidden="true">
+      <span>Scroll</span>
+      <div class="scroll-line"></div>
+    </div>
+  </section>
+
+  <div class="rule"></div>
+
+
+  <!-- ══════════════════════════════════════════════════════════
+       ABOUT
+  ══════════════════════════════════════════════════════════ -->
+  <section id="about" aria-label="自己紹介">
+    <div class="container">
+      <div class="about-grid">
+
+        <!-- 左：見出し -->
+        <div class="reveal">
+          <span class="section-label">About</span>
+          <h2 class="about-heading">
+            Design &amp; Code,<br>
+            <em>Thoughtfully.</em>
+          </h2>
+        </div>
+
+        <!-- 右：本文 + pills -->
+        <div class="reveal" style="transition-delay:0.1s">
+
+          <!-- ▼ 自己紹介文：変更してください -->
+          <p class="about-body">
+            App StoreへのiOSアプリ公開経験を持ち、WebサイトからモバイルアプリまでUI/UXを意識した設計・実装を行っています。<br><br>
+            クライアントのビジネス課題を深く理解し、ユーザーが直感的に使えるプロダクトを届けることを大切にしています。納品後のサポートも対応します。
+          </p>
+
+          <!-- 強み Pills -->
+          <div class="about-pills">
+            <span class="pill"><span class="dot"></span>AppStore 公開経験あり</span>
+            <span class="pill"><span class="dot"></span>Webサイト制作対応</span>
+            <span class="pill"><span class="dot"></span>UI/UX 意識した設計</span>
+            <span class="pill"><span class="dot"></span>納品後サポート</span>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <div class="rule"></div>
+
+
+  <!-- ══════════════════════════════════════════════════════════
+       WORKS  ─ カードを追加するには .card ブロックをコピーしてください
+       ────────────────────────────────────────────────────────
+       [カスタマイズ方法]
+         data-url   = クリック時の遷移先URL（空にするとクリック無効）
+         data-layout= "app"（アイコン中央）/ "web"（スクリーンショット）
+         <img src> = 画像パスまたはURL。画像がない場合は自動でフォールバック表示
+         --thumb-bg = サムネイル背景グラデーション（CSS変数）
+         --thumb-ratio = 画像エリアのアスペクト比（例: 4/3, 1/1）
+  ══════════════════════════════════════════════════════════ -->
+  <section id="works" aria-label="制作実績">
+    <div class="container">
+
+      <div class="works-header reveal">
+        <div>
+          <span class="section-label">Works</span>
+          <h2 class="works-heading">Selected<br><em>Projects</em></h2>
+        </div>
+        <span class="works-count">02 projects</span>
+      </div>
+
+      <div class="works-grid reveal-group">
+
+        <!-- ══════════════════════════════════════════════════
+             Card 1: エモナル（アプリ）
+             ▼ data-url を App Store の URL に変更してください
+             ▼ <img src> にアプリアイコン画像パスを入力してください
+        ══════════════════════════════════════════════════ -->
+        <article
+          class="card"
+          data-layout="app"
+          data-url="https://apps.apple.com/jp/app/%E3%82%A8%E3%83%A2%E3%83%8A%E3%83%AB/id6758684026"
+          style="--thumb-bg: linear-gradient(140deg, #1C1C3A 0%, #2A2A5E 45%, #1A3A5C 100%); --thumb-ratio: 16/9;"
+          aria-label="エモナル - App Store で見る"
+        >
+          <div class="card-thumb-wrap">
+            <!-- ▼ src に画像パスを入力（例: images/emonaru-icon.png） -->
+            <!-- 画像がない間はフォールバックテキストが表示されます     -->
+            <img
+              src="images/エモナル.jpg"
+              alt="エモナル アプリアイコン"
+              loading="lazy"
+              decoding="async"
+              width="140" height="140"
+            >
+            <!-- 画像なし時のフォールバック -->
+            <div class="card-thumb-fallback" aria-hidden="true">エモナル</div>
+            <span class="card-tag">iOS App</span>
+          </div>
+
+          <div class="card-body">
+            <h3 class="card-title">エモナル</h3>
+            <p class="card-desc">
+              感情を記録・可視化するiOSアプリ。AppStoreにて公開済み。シンプルなUIで毎日の気分をトラッキングできます。
+            </p>
+            <div class="card-footer">
+              <div class="card-tags">
+                <span class="tag-sm">Swift</span>
+                <span class="tag-sm">Firebase</span>
+                <span class="tag-sm">AppStore</span>
+              </div>
+              <span class="card-arrow">
+                App Store
+                <svg width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden="true">
+                  <path d="M2.5 6h7M6 2.5l3.5 3.5L6 9.5" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+              </span>
+            </div>
+          </div>
+        </article>
+
+
+        <!-- ══════════════════════════════════════════════════
+             Card 2: カフェサイト（Web）
+             ▼ data-url をカフェサイトの URL に変更してください
+             ▼ <img src> にスクリーンショット画像パスを入力してください
+        ══════════════════════════════════════════════════ -->
+        <article
+          class="card"
+          data-layout="web"
+          data-url="https://kokonao1111.github.io/cafe/"
+          style="--thumb-bg: linear-gradient(140deg, #2C2C2C 0%, #4A4A4A 100%); --thumb-ratio: 16/10;"
+          aria-label="カフェサイト - サイトを見る"
+        >
+          <div class="card-thumb-wrap">
+            <!-- ▼ src にスクリーンショット画像パスを入力（例: images/cafe-screenshot.jpg） -->
+            <img
+              src="images/スクリーンショット 2026-02-21 003331.png"
+              alt="カフェサイト スクリーンショット"
+              loading="lazy"
+              decoding="async"
+              width="800" height="500"
+            >
+            <!-- 画像なし時のフォールバック -->
+            <div class="card-thumb-fallback" aria-hidden="true">Café</div>
+            <span class="card-tag">Web</span>
+          </div>
+
+          <div class="card-body">
+            <h3 class="card-title">カフェサイト</h3>
+            <p class="card-desc">
+              地域のカフェ向けコーポレートサイト。予約フォーム・メニュー表示・Instagram連携を含むレスポンシブデザイン。
+            </p>
+            <div class="card-footer">
+              <div class="card-tags">
+                <span class="tag-sm">HTML/CSS</span>
+                <span class="tag-sm">JavaScript</span>
+                <span class="tag-sm">Responsive</span>
+              </div>
+              <span class="card-arrow">
+                サイトを見る
+                <svg width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden="true">
+                  <path d="M2.5 6h7M6 2.5l3.5 3.5L6 9.5" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+              </span>
+            </div>
+          </div>
+        </article>
+
+
+        <!-- ══════════════════════════════════════════════════
+             Card 3: Coming Soon（追加用テンプレート）
+             ▼ data-url を削除するとクリック無効になります
+             ▼ data-layout を "app" / "web" に切り替えてください
+        ══════════════════════════════════════════════════ -->
+        <article
+          class="card card-soon"
+          data-layout="web"
+          style="--thumb-ratio: 16/10;"
+          aria-label="次のプロジェクト（準備中）"
+        >
+          <div class="card-thumb-wrap">
+            <!-- 画像なし → フォールバックのみ表示 -->
+            <div class="card-thumb-fallback" aria-hidden="true">Coming Soon</div>
+            <span class="card-tag" style="background:rgba(0,0,0,0.06);border-color:rgba(0,0,0,0.1);color:var(--c-ink-muted);">Next Project</span>
+          </div>
+          <div class="card-body">
+            <h3 class="card-title">Next Project</h3>
+            <p class="card-desc">現在開発中のプロジェクトです。公開をお楽しみに。</p>
+            <div class="card-footer">
+              <div class="card-tags">
+                <span class="tag-sm">TBD</span>
+              </div>
+            </div>
+          </div>
+        </article>
+
+      </div><!-- /works-grid -->
+    </div>
+  </section>
+
+
+  <!-- ══════════════════════════════════════════════════════════
+       SKILLS
+  ══════════════════════════════════════════════════════════ -->
+  <section id="skills" aria-label="スキル">
+    <div class="container">
+      <div class="reveal">
+        <span class="section-label">Skills</span>
+        <h2 class="works-heading" style="margin-bottom:48px;">Technical<br><em>Expertise</em></h2>
+      </div>
+
+      <!-- ▼ スキルを追加するには .skill-item をコピー -->
+      <div class="skills-grid reveal-group">
+
+        <div class="skill-item">
+          <div class="skill-icon">🌐</div>
+          <div class="skill-name">HTML</div>
+          <div class="skill-level">Semantic · Accessible</div>
+        </div>
+
+        <div class="skill-item">
+          <div class="skill-icon">🎨</div>
+          <div class="skill-name">CSS</div>
+          <div class="skill-level">Animation · Layout</div>
+        </div>
+
+        <div class="skill-item">
+          <div class="skill-icon">⚡</div>
+          <div class="skill-name">JavaScript</div>
+          <div class="skill-level">ES2022+ · DOM</div>
+        </div>
+
+        <div class="skill-item">
+          <div class="skill-icon">🔥</div>
+          <div class="skill-name">Firebase</div>
+          <div class="skill-level">Auth · Firestore</div>
+        </div>
+
+        <div class="skill-item">
+          <div class="skill-icon">🐍</div>
+          <div class="skill-name">Flask</div>
+          <div class="skill-level">REST API · Python</div>
+        </div>
+
+        <div class="skill-item">
+          <div class="skill-icon">📱</div>
+          <div class="skill-name">Mobile App</div>
+          <div class="skill-level">iOS · AppStore</div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ══════════════════════════════════════════════════════════
+       CONTACT
+       ────────────────────────────────────────────────────────
+       [Formspree 設定手順]
+         1. https://formspree.io にアクセスしてアカウント作成（無料）
+         2. "New Form" → 受信先メールアドレスを入力
+         3. 発行されたフォームID（例: xaybzpkq）をコピー
+         4. 下の <form action="..."> の YOUR_FORM_ID をそのIDに書き換える
+            例: action="https://formspree.io/f/xaybzpkq"
+         5. 完了！送信テストを行ってください。
+
+       [メールアドレスを変更したい場合]
+         Formspree ダッシュボード → フォームを選択
+         → "Settings" → "Email" → メールアドレスを変更して保存
+         コードの変更は不要です。
+  ══════════════════════════════════════════════════════════ -->
+  <section id="contact" aria-label="お問い合わせ">
+    <div class="container">
+
+      <span class="section-label reveal">Contact</span>
+
+      <div class="reveal">
+        <h2 class="contact-heading">Let's Work<br><em>Together.</em></h2>
+        <p class="contact-sub">お気軽にご相談ください。2営業日以内にご返信いたします。</p>
+      </div>
+
+      <!-- ──────────────────────────────────────────────────
+           フォーム本体
+           action の YOUR_FORM_ID を Formspree のIDに変更してください
+      ────────────────────────────────────────────────────── -->
+      <form
+        class="contact-form reveal"
+        id="contactForm"
+        action="https://formspree.io/f/mjgeelpa"
+        method="POST"
+        novalidate
+      >
+
+        <!-- ハニーポット（スパム対策：ロボットが自動入力するフィールド。人間には非表示） -->
+        <input type="text" name="_gotcha" tabindex="-1" aria-hidden="true"
+          style="position:absolute;left:-9999px;width:1px;height:1px;opacity:0;pointer-events:none;">
+
+        <!-- Formspree: 送信後のリダイレクト先（SPAなのでリダイレクト無効にしてJS制御） -->
+        <input type="hidden" name="_next" value="about:blank">
+
+        <!-- お名前 -->
+        <div class="field">
+          <label for="fname">
+            お名前 <span aria-hidden="true" style="color:rgba(255,255,255,0.3);margin-left:2px;">*</span>
+          </label>
+          <input
+            type="text"
+            id="fname"
+            name="name"
+            placeholder="山田 太郎"
+            autocomplete="name"
+            required
+            maxlength="100"
+          >
+          <span class="field-error" role="alert">お名前を入力してください</span>
+        </div>
+
+        <!-- メールアドレス -->
+        <div class="field">
+          <label for="femail">
+            メールアドレス <span aria-hidden="true" style="color:rgba(255,255,255,0.3);margin-left:2px;">*</span>
+          </label>
+          <input
+            type="email"
+            id="femail"
+            name="email"
+            placeholder="you@example.com"
+            autocomplete="email"
+            required
+            maxlength="254"
+          >
+          <span class="field-error" role="alert">有効なメールアドレスを入力してください</span>
+        </div>
+
+        <!-- メッセージ -->
+        <div class="field">
+          <label for="fmessage">
+            メッセージ <span aria-hidden="true" style="color:rgba(255,255,255,0.3);margin-left:2px;">*</span>
+          </label>
+          <textarea
+            id="fmessage"
+            name="message"
+            rows="6"
+            placeholder="プロジェクトの詳細・スケジュール・ご予算などをお聞かせください。"
+            required
+            maxlength="3000"
+          ></textarea>
+          <span class="field-error" role="alert">メッセージを入力してください（3000文字以内）</span>
+        </div>
+
+        <!-- 送信ボタン -->
+        <button type="submit" class="form-submit" id="formSubmitBtn">
+          <span class="btn-label">送信する</span>
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+            <path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </button>
+
+        <!-- 成功メッセージ -->
+        <div class="form-status is-success" id="formSuccess" role="status" aria-live="polite" aria-atomic="true">
+          ✓&ensp;ありがとうございます。メッセージを受け付けました。<br>
+          2営業日以内にご連絡いたします。
+        </div>
+
+        <!-- エラーメッセージ -->
+        <div class="form-status is-error" id="formError" role="alert" aria-live="assertive" aria-atomic="true">
+          ⚠&ensp;送信に失敗しました。しばらく待ってから再度お試しください。<br>
+          <span id="formErrorDetail" style="font-size:12px;opacity:0.7;"></span>
+        </div>
+
+      </form><!-- /contactForm -->
+
+
+      <!-- ──────────────────────────────────────────────────
+           フッターロー：メール直リンク
+           ▼ your@gmail.com を実際のメールアドレスに変更してください
+           ▼ SNSを追加したい場合は .contact-extra-link をコピーしてください
+      ────────────────────────────────────────────────────── -->
+      <div class="contact-footer-row reveal">
+        <span class="contact-footer-label">Email</span>
+
+        <!-- ▼ href="mailto:..." -->
+        <a href="mailto:kokonao70123@gmail.com" class="contact-email-link" aria-label="メールを送る">
+          <span class="__cf_email__" data-cfemail="3a43554f487a5d575b535614595557">kokonao70123@gmail.com</span>
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+            <path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </a>
+
+        <!--
+          
+          <a href="https://github.com/yourname" target="_blank" rel="noopener noreferrer" class="contact-extra-link">GitHub</a>
+          <a href="https://twitter.com/yourname"  target="_blank" rel="noopener noreferrer" class="contact-extra-link">X</a>
+        -->
+      </div>
+
+    </div>
+  </section>
+
+
+  <!-- ══════════════════════════════════════════════════════════
+       FOOTER
+  ══════════════════════════════════════════════════════════ -->
+  <footer>
+    <div class="container footer-inner">
+      <span class="footer-logo">Portfolio</span>
+      <!-- ▼ 年・名前を変更してください -->
+      <span class="footer-copy">&copy; 2025 Your Name. All rights reserved.</span>
+    </div>
+  </footer>
+
+
+  <!-- ══════════════════════════════════════════════════════════
+       JAVASCRIPT
+  ══════════════════════════════════════════════════════════ -->
+  <script>
+    /* ════════════════════════════════════════════════════════
+       LOADING SCREEN — 設定エリア
+       ════════════════════════════════════════════════════════
+       ▼ここだけ変更すれば OK ▼
+    ════════════════════════════════════════════════════════ */
+
+    /**
+     * ローディング画面の ON / OFF
+     *   true  → 表示する（本番用）
+     *   false → スキップする（開発中や無効化したい場合）
+     */
+    const LOADER_ENABLED = true;
+
+    /**
+     * ローディング画面の最低表示時間（ミリ秒）
+     *   推奨: 1000〜1600 ms
+     *   ※ページの実際の読み込みがこれより長い場合は読み込み完了まで待ちます
+     *   ※短すぎるとプログレスバーが途中で消える印象になるため 1000ms 以上推奨
+     */
+    const LOADER_DURATION = 1400;
+
+    /* ════════════════════════════════════════════════════════
+       以下は変更不要
+    ════════════════════════════════════════════════════════ */
+    (function () {
+      const loader = document.getElementById('loader');
+      if (!loader) return;
+
+      /* ① 無効の場合は即座に非表示 */
+      if (!LOADER_ENABLED) {
+        loader.style.display = 'none';
+        return;
+      }
+
+      /* ② ボディのスクロールをロック */
+      document.body.classList.add('is-loading');
+
+      /* ③ プログレスバーの duration を LOADER_DURATION に合わせる
+            開始 0.45s 遅延 + フェードアウト 0.55s = 余裕を持たせた値  */
+      const barDuration = Math.max(LOADER_DURATION * 0.0008, 0.6);  /* 秒 */
+      loader.style.setProperty('--loader-bar-duration', barDuration + 's');
+
+      /* ④ 最低表示時間 と DOMContentLoaded の両方を待ってからフェードアウト */
+      const startTime = performance.now();
+
+      function hideLoader() {
+        const elapsed = performance.now() - startTime;
+        const remaining = Math.max(LOADER_DURATION - elapsed, 0);
+
+        setTimeout(() => {
+          /* フェードアウト開始 */
+          loader.classList.add('is-hidden');
+          document.body.classList.remove('is-loading');
+
+          /* トランジション完了後に DOM から完全除去（メモリ解放） */
+          loader.addEventListener('transitionend', () => {
+            loader.remove();
+          }, { once: true });
+        }, remaining);
+      }
+
+      /* ページの読み込み状態に応じて発火タイミングを切り替え */
+      if (document.readyState === 'complete') {
+        hideLoader();
+      } else {
+        window.addEventListener('load', hideLoader, { once: true });
+      }
+    })();
+
+    /* ── ナビゲーション：スクロールで背景表示 ─────────── */
+    const nav = document.getElementById('nav');
+    window.addEventListener('scroll', () => {
+      nav.classList.toggle('scrolled', window.scrollY > 40);
+    }, { passive: true });
+
+    /* ── ハンバーガーメニュー ────────────────────────── */
+    const burger    = document.getElementById('burger');
+    const navMobile = document.getElementById('navMobile');
+
+    burger.addEventListener('click', () => {
+      const isOpen = navMobile.classList.toggle('open');
+      burger.classList.toggle('open', isOpen);
+      burger.setAttribute('aria-expanded', String(isOpen));
+      // スクロール制御
+      document.body.style.overflow = isOpen ? 'hidden' : '';
+    });
+
+    function closeMenu() {
+      navMobile.classList.remove('open');
+      burger.classList.remove('open');
+      burger.setAttribute('aria-expanded', 'false');
+      document.body.style.overflow = '';
+    }
+    // ESC でメニューを閉じる
+    document.addEventListener('keydown', e => { if (e.key === 'Escape') closeMenu(); });
+
+    /* ── スクロールで要素をフェードイン ─────────────── */
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+          observer.unobserve(entry.target); // 一度だけ発火
+        }
+      });
+    }, { threshold: 0.12 });
+
+    document.querySelectorAll('.reveal, .reveal-group').forEach(el => observer.observe(el));
+
+    /* ════════════════════════════════════════════════════════
+       お問い合わせフォーム（Formspree 連携）
+       ════════════════════════════════════════════════════════
+       [仕組み]
+         1. クライアント側でバリデーション
+         2. ハニーポットフィールドが埋まっていたらボット判定でブロック
+         3. fetch() で Formspree の API に JSON 送信
+         4. 成功/失敗でそれぞれメッセージを表示
+    ════════════════════════════════════════════════════════ */
+    const contactForm   = document.getElementById('contactForm');
+    const formSubmitBtn = document.getElementById('formSubmitBtn');
+    const formSuccess   = document.getElementById('formSuccess');
+    const formError     = document.getElementById('formError');
+    const formErrorDetail = document.getElementById('formErrorDetail');
+
+    /* ── フィールドバリデーション ────────────────────── */
+    function validateField(input) {
+      const isEmpty = !input.value.trim();
+      const isEmailField = input.type === 'email';
+      const emailOk = !isEmailField || /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(input.value.trim());
+      const isInvalid = isEmpty || !emailOk;
+
+      input.classList.toggle('invalid', isInvalid);
+      return !isInvalid;
+    }
+
+    /* リアルタイムバリデーション（フォーカスが外れたとき） */
+    contactForm.querySelectorAll('input[required], textarea[required]').forEach(input => {
+      input.addEventListener('blur', () => validateField(input));
+      input.addEventListener('input', () => {
+        if (input.classList.contains('invalid')) validateField(input);
+      });
+    });
+
+    /* ── フォーム送信 ─────────────────────────────────── */
+    contactForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
+
+      /* ① ハニーポットチェック（スパムbot対策） */
+      const honeypot = contactForm.querySelector('input[name="_gotcha"]');
+      if (honeypot && honeypot.value) {
+        /* ボットの場合：エラーも成功も表示せず静かに無視 */
+        return;
+      }
+
+      /* ② 全フィールドをバリデーション */
+      const requiredFields = [...contactForm.querySelectorAll('input[required], textarea[required]')];
+      const allValid = requiredFields.map(f => validateField(f)).every(Boolean);
+      if (!allValid) {
+        /* 最初のエラーフィールドにフォーカス */
+        const firstInvalid = contactForm.querySelector('.invalid');
+        if (firstInvalid) firstInvalid.focus();
+        return;
+      }
+
+      /* ③ フォームID が未設定の場合は警告して停止 */
+      const action = contactForm.getAttribute('action') || '';
+      if (action.includes('YOUR_FORM_ID')) {
+        formError.style.display = 'block';
+        formErrorDetail.textContent = 'フォームID が未設定です。index.html の YOUR_FORM_ID を Formspree のIDに変更してください。';
+        return;
+      }
+
+      /* ④ 送信中UI */
+      const btnLabel = formSubmitBtn.querySelector('.btn-label');
+      formSubmitBtn.disabled = true;
+      btnLabel.textContent   = '送信中...';
+      formSuccess.style.display = 'none';
+      formError.style.display   = 'none';
+
+      /* ⑤ Formspree へ fetch 送信 */
+      try {
+        const data = new FormData(contactForm);
+        const res  = await fetch(action, {
+          method:  'POST',
+          body:    data,
+          headers: { 'Accept': 'application/json' }
+        });
+
+        if (res.ok) {
+          /* 成功 */
+          contactForm.reset();
+          requiredFields.forEach(f => f.classList.remove('invalid'));
+          formSubmitBtn.style.display = 'none';
+          formSuccess.style.display   = 'block';
+          /* スムーズにスクロール */
+          formSuccess.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        } else {
+          /* Formspree からのエラー */
+          const json = await res.json().catch(() => ({}));
+          const msg  = json.errors ? json.errors.map(e => e.message).join(' / ') : `HTTP ${res.status}`;
+          formErrorDetail.textContent   = msg;
+          formError.style.display       = 'block';
+          formSubmitBtn.disabled        = false;
+          btnLabel.textContent          = '送信する';
+        }
+      } catch (err) {
+        /* ネットワークエラー */
+        formErrorDetail.textContent = 'ネットワークエラーが発生しました。接続を確認してください。';
+        formError.style.display     = 'block';
+        formSubmitBtn.disabled      = false;
+        btnLabel.textContent        = '送信する';
+      }
+    });
+
+    /* ── Works カード：クリックで外部リンクへ遷移 ───── */
+    /*
+     * data-url 属性を持つカードをクリックすると新しいタブで URL を開きます。
+     * キーボード操作（Enter/Space）にも対応。
+     * [カスタマイズ] data-url の値を変更するだけでリンク先を変更できます。
+     */
+    document.querySelectorAll('.card[data-url]').forEach(card => {
+      const url = card.getAttribute('data-url');
+      if (!url || url.includes('YOUR_')) return;   // 未設定ならスキップ
+
+      // アクセシビリティ属性
+      card.setAttribute('role', 'link');
+      card.setAttribute('tabindex', '0');
+
+      // クリック
+      card.addEventListener('click', () => window.open(url, '_blank', 'noopener,noreferrer'));
+
+      // キーボード
+      card.addEventListener('keydown', e => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          window.open(url, '_blank', 'noopener,noreferrer');
+        }
+      });
+    });
+
+    /* ── Works カード：画像エラー時フォールバック ────── */
+    /*
+     * 画像の読み込みに失敗した場合、img 要素を非表示にして
+     * .card-thumb-fallback テキストを表示します。
+     */
+    document.querySelectorAll('.card-thumb-wrap img').forEach(img => {
+      // src が空 or 未設定のときは最初から非表示
+      if (!img.src || img.src === window.location.href) {
+        img.style.display = 'none';
+        return;
+      }
+      img.addEventListener('error', () => {
+        img.style.display = 'none';
+        const fb = img.closest('.card-thumb-wrap').querySelector('.card-thumb-fallback');
+        if (fb) fb.style.display = 'flex';
+      });
+    });
+
+    /* ── アクティブナビリンク（スクロール連動） ──────── */
+    const sections = document.querySelectorAll('section[id]');
+    const navLinks = document.querySelectorAll('.nav-links a');
+
+    const navObserver = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          navLinks.forEach(link => {
+            link.style.color =          link.style.color = link.getAttribute('href') === `#${entry.target.id}`
+              ? 'var(--c-ink)' : '';
+          });
+        }
+      });
+    }, { threshold: 0.4 });
+
+    sections.forEach(s => navObserver.observe(s));
+  </script>
+
+</body>
+</html>
