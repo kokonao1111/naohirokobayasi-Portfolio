@@ -42,5 +42,5 @@ Web・アプリ開発のフリーランスエンジニア、小林直寛のポ�
 
 お仕事のご依頼・ご相談は以下からお気軽にどうぞ。
 
-- **Email**: kokonao70123@gmail.com
+- **Email**: naobuilder70@gmail.com
 - **お問い合わせフォーム**: サイト内 Contact セクション
