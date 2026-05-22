@@ -25,7 +25,7 @@ Web・アプリ開発のフリーランスエンジニア、小林直寛のポ�
 | 3 | AppReview AI | Web App |
 | 4 | EC-site | Web |
 | 5 | luce. | Web |
-| 6 | Next Project（開発中） | Desktop App |
+| 6 | SparkAI | Desktop App |
 
 ## Tech Stack
 
